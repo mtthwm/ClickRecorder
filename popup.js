@@ -1,14 +1,25 @@
-// popup.js
+const btn = document.getElementById("toggleRecording");
+
 let recording = false;
 
-const btn = document.getElementById("toggleRecording");
-btn.addEventListener("click", () => {
-    recording = !recording;
-    
+function updateDisplay () {
     if (recording) {
         btn.innerText = "Stop";
     } else {
         btn.innerText = "Start";
     }
-});
-  
+}
+
+// ON POPUP SHOW
+(async () => {
+    const response = await chrome.runtime.sendMessage({ action: "requestRecordingStatus", name: "Popup" });
+    recording = response.reply;
+    updateDisplay();
+
+    btn.addEventListener("click", () => {
+        recording = !recording;
+        chrome.runtime.sendMessage({ action: "toggleRecording", name: "Popup" });
+        
+        updateDisplay();
+    });
+})();

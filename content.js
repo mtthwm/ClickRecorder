@@ -1,2 +1,4 @@
-// Changes the background color of the current page
-document.body.style.backgroundColor = "#ffcccb";
+document.addEventListener("click", event => {
+    console.log(event.target);
+});
+
