@@ -5,10 +5,25 @@ function handleRecordingStart () {
 
 }
 
+function replay (clicks) {
+    useCurrentTabId (id => {
+        chrome.tabs.sendMessage(id, {action: "replayActions", name: "Background", extraInfo: {clicks: clicks}});
+    });
+}
+
 function handleRecordingEnd () {
+    replay(clicks);
     clicks = [];
 }
 
+function useCurrentTabId (cb) {
+    chrome.tabs.query(
+        { currentWindow: true, active: true },
+        function (tabList) {
+            cb(tabList[0].id)
+        }
+    );
+}
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {    
     if (message.action === "toggleRecording") {
