@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "ClickRecorder",
+    "version": "1.0",
+    "description": "A simple Chrome extension boilerplate.",
+    "permissions": ["scripting", "activeTab"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html"
+    }
+  }
+  
