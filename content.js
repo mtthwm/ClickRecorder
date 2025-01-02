@@ -1,3 +1,5 @@
+const CLICK_DELAY = 1000;
+
 function ClickAction (elementType, elementId, elementClass) {
     return {
         elementClass: elementClass,
@@ -16,7 +18,7 @@ document.addEventListener("click", event => {
 });
 
 function cr_ext_replay (clickActions) {
-    clickActions.forEach(action => {
+    clickActions.forEach((action, index) => setTimeout(() => {
         let qs = action.elementType;
         if (action.elementClass) {
             
@@ -27,8 +29,8 @@ function cr_ext_replay (clickActions) {
         }
 
         const clickTarget = document.querySelector(qs);
-        console.log(clickTarget);
-    });
+        clickTarget.click();
+    }, CLICK_DELAY*index));
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {    
