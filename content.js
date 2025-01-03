@@ -1,10 +1,23 @@
 const CLICK_DELAY = 1000;
 
 function ClickAction (elementType, elementId, elementClass) {
+    let qs = elementType;
+    if (elementClass) {
+        
+        qs += `.${elementClass.split(" ").join(".")}`;
+    }
+    if (elementId) {
+        qs += `#${elementId}`;
+    }
+
     return {
-        elementClass: elementClass,
-        elementId: elementId,
-        elementType: elementType,
+        type: "click",
+        target: {
+            elementClass: elementClass,
+            elementId: elementId,
+            elementType: elementType,
+            querySelector: qs
+        }
     }
 }
 
@@ -17,24 +30,19 @@ document.addEventListener("click", event => {
     chrome.runtime.sendMessage({ action: "clickAction", name: "Popup", extraInfo: {action: action}});
 });
 
-function cr_ext_replay (clickActions) {
-    clickActions.forEach((action, index) => setTimeout(() => {
-        let qs = action.elementType;
-        if (action.elementClass) {
-            
-            qs += `.${action.elementClass.split(" ").join(".")}`;
-        }
-        if (action.elementId) {
-            qs += `#${action.elementId}`;
-        }
+function cr_ext_replay_click (clickActionTarget) {
+    const clickTarget = document.querySelector(clickActionTarget.querySelector);
+    clickTarget.click();
+}
 
-        const clickTarget = document.querySelector(qs);
-        clickTarget.click();
+function cr_ext_replay (recActions) {
+    recActions.forEach((action, index) => setTimeout(() => {
+        cr_ext_replay_click(action.target);
     }, CLICK_DELAY*index));
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {    
     if (message.action === "replayActions") {
-        cr_ext_replay(message.extraInfo.clicks);
+        cr_ext_replay(message.extraInfo.recActions);
     }
 });

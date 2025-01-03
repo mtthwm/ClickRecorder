@@ -1,4 +1,7 @@
 const btn = document.getElementById("toggleRecording");
+const recordingEntry = (recActionList) => {
+
+}
 
 let recording = false;
 

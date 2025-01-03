@@ -3,7 +3,7 @@
     "name": "ClickRecorder",
     "version": "1.0",
     "description": "A simple Chrome extension boilerplate.",
-    "permissions": ["scripting", "activeTab"],
+    "permissions": ["scripting", "activeTab", "storage"],
     "background": {
         "service_worker": "background.js"
     },

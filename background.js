@@ -1,19 +1,19 @@
 let recording = false;
-let clicks = [];
+let recActions = [];
 
 function handleRecordingStart () {
 
 }
 
-function replay (clicks) {
+function replay (recActions) {
     useCurrentTabId (id => {
-        chrome.tabs.sendMessage(id, {action: "replayActions", name: "Background", extraInfo: {clicks: clicks}});
+        chrome.tabs.sendMessage(id, {action: "replayActions", name: "Background", extraInfo: {recActions: recActions}});
     });
 }
 
 function handleRecordingEnd () {
-    replay(clicks);
-    clicks = [];
+    replay(recActions);
+    recActions = [];
 }
 
 function useCurrentTabId (cb) {
@@ -38,7 +38,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     } else if (message.action === "clickAction") {
         if (recording) {
             const clickAction = message.extraInfo.action;
-            clicks.push(clickAction)
+            recActions.push(clickAction)
         }
     }
 
